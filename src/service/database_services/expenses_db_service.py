@@ -8,7 +8,11 @@ class ExpensesDBService:
 
     @classmethod
     def create_expense(cls, session: Session, expense_info: dict) -> None:
-        logger.info("Creating expense on database")
-        expense = Expenses(**expense_info)
-        session.add(expense)
-        session.commit()
+        try:
+            logger.info("Creating expense on database")
+            expense = Expenses(**expense_info)
+            session.add(expense)
+            session.commit()
+        except Exception as e:
+            logger.error(f"Unable to create expense on database: {e}")
+            session.rollback()

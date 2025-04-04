@@ -29,8 +29,7 @@ class ExpenseService:
             }
 
             ExpensesDBService.create_expense(session, expense_info)
-            response_msg = f"{expense_info['category']} expense added ✅"
-            return {"msg": response_msg}
+            return expense_info
         except Exception as e:
             logger.error(f"Error: {e}")
             raise Exception(e)
