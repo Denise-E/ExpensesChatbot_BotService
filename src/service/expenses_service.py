@@ -15,15 +15,16 @@ class ExpenseService:
         logger.info("Creating expense")
         try:
             # Verifies if the user is in the database (enabled for using the system)
-            # user = UsersDBService.get_user_by_telegram_id(session, telegram_id)
+            user = UsersDBService.get_user_by_telegram_id(session, telegram_id)
 
             # If the user is not in the database, it throws an exception
-            #if not user:
-            #    raise Exception("User not found")
+            if not user:
+                raise Exception("User not found")
 
             expense = ModelsService.is_expense(expense_info)
-            logger.info(f"Expense -> {expense}")
-            return {"message": expense_info, "is_expense": expense.is_expense}
+
+            if not expense.is_expense:
+                return {}
 
             expense_info = {
                 "user_id": user.id,
@@ -33,7 +34,7 @@ class ExpenseService:
                 "added_at": dt.datetime.now()
             }
 
-            # ExpensesDBService.create_expense(session, expense_info)
+            ExpensesDBService.create_expense(session, expense_info)
             return expense_info
         except Exception as e:
             logger.error(f"Error: {e}")
