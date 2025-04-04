@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 
 from src.service.database_services.expenses_db_service import ExpensesDBService
 from src.service.database_services.users_db_service import UsersDBService
+from src.service.models_service import ModelsService
 from src.utils.logger import logger
 
 
@@ -20,6 +21,11 @@ class ExpenseService:
             if not user:
                 raise Exception("User not found")
 
+            expense = ModelsService.is_expense(expense_info)
+            logger.info(f"Response type {type(expense)}")
+            logger.info(f"Result for message {expense} - RESULT {expense.is_expense}")
+            #return {"message": expense_info, "is_expense": expense.is_expense}
+
             expense_info = {
                 "user_id": user.id,
                 "description": "example",  # TODO
@@ -28,7 +34,7 @@ class ExpenseService:
                 "added_at": dt.datetime.now()
             }
 
-            ExpensesDBService.create_expense(session, expense_info)
+            # ExpensesDBService.create_expense(session, expense_info)
             return expense_info
         except Exception as e:
             logger.error(f"Error: {e}")
