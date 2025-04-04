@@ -16,9 +16,9 @@ Respond only with a JSON object with:
 - reason: a brief explanation justifying your decision.
 
 Examples of messages that should return **false**:
-- Casual greetings with numbers (e.g., "Hey, how are you? 20 pesos")
+- Casual greetings with numbers (e.g., "Hey, how are you? I have 20 bucks")
 - Future intentions (e.g., "I want to buy...", "I'm planning to get...")
-- Jokes or subjective statements with money (e.g., "20 pesos because you're ugly")
+- Jokes or subjective statements with money (e.g., "I could give u 20 dollars just because you're a good person")
 
 Message: "{message}"
 """
