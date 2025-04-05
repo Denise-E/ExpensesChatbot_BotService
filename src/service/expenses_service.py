@@ -21,21 +21,27 @@ class ExpenseService:
             if not user:
                 raise Exception("User not found")
 
+            logger.info("FIRST MODEL START")
             expense = ModelsService.is_expense(expense_info)
+            logger.info("FIRST MODEL END")
 
             if not expense.is_expense:
                 logger.info(f"The input is not an expense: {expense_info}")
                 return {}
 
             logger.info("Expense found")
+            logger.info("SECOND MODEL START")
             expense_values = ModelsService.get_expense_values(expense_info)
+            logger.info("SECOND MODEL END")
             logger.info(f"Expense values: {expense_values}")
 
             if not expense_values.amount:
                 raise Exception("Invalid amount")
 
             logger.info("Expense data extracted successfully")
+            logger.info("THIRD MODEL START")
             category_clasification = ModelsService.get_expense_category(expense_values.description)
+            logger.info("THIRD MODEL END")
 
             """            
             In order to make sure the expense is saved, we set 'Other' as the default category the
