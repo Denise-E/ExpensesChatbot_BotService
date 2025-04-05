@@ -24,12 +24,22 @@ class ExpenseService:
             expense = ModelsService.is_expense(expense_info)
 
             if not expense.is_expense:
+                logger.info(f"The input is not an expense: {expense_info}")
                 return {}
+
+            logger.info("Expense found")
+            expense_values = ModelsService.get_expense_values(expense_info)
+            logger.info(f"Expense values: {expense_values}")
+
+            if not expense_values.amount:
+                raise Exception("Invalid amount")
+
+            logger.info("Expense data extracted successfully")
 
             expense_info = {
                 "user_id": user.id,
-                "description": "example",  # TODO
-                "amount": 150.02,  # TODO
+                "description": expense_values.description,
+                "amount": expense_values.amount,
                 "category": "General",  # TODO
                 "added_at": dt.datetime.now()
             }

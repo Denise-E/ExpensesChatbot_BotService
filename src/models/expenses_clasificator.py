@@ -24,12 +24,12 @@ Message: "{message}"
 """
 )
 
-
 # Ollama Model
 llm = ChatOllama(model="llama3")
 
 # Pydantic parser
 parser = PydanticOutputParser(pydantic_object=ExpenseClassification)
+
 
 # Chain
 def build_expense_classification_chain():

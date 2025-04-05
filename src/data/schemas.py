@@ -1,6 +1,13 @@
-from pydantic import BaseModel
+from typing import Optional
+
+from pydantic import BaseModel, Field
 
 
 class ExpenseClassification(BaseModel):
     is_expense: bool
     reason: str
+
+
+class ExtractedExpense(BaseModel):
+    amount: Optional[float] = Field(None, description="The amount of money spent")
+    description: Optional[str] = Field(None, description="What the expense was for")

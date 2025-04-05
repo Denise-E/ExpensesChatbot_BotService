@@ -25,7 +25,6 @@ def health():
 @app.route("/api/create/expenses", methods=['POST'])
 def create_expense():
     try:
-        logger.info('Creating expense')
         data = request.json
         res = ExpenseService.create_expense(session, data["telegram_id"], data["text"])
         return res
