@@ -35,12 +35,18 @@ class ExpenseService:
                 raise Exception("Invalid amount")
 
             logger.info("Expense data extracted successfully")
+            category_clasification = ModelsService.get_expense_category(expense_values.description)
 
+            """            
+            In order to make sure the expense is saved, we set 'Other' as the default category the
+            category clasification model don´t return a category.
+            """
             expense_info = {
                 "user_id": user.id,
-                "description": expense_values.description,
+                # .capitalize() for the text to start with a capital letter
+                "description": expense_values.description.capitalize(),
                 "amount": expense_values.amount,
-                "category": "General",  # TODO
+                "category": "Other" if not category_clasification.category else category_clasification.category,
                 "added_at": dt.datetime.now()
             }
 
