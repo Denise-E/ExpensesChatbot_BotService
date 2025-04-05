@@ -8,10 +8,10 @@ from src.service.models_service import ModelsService
 from src.utils.logger import logger
 
 
-class ExpenseService:
+class ExpensesService:
 
     @classmethod
-    def create_expense(cls, session: Session, telegram_id: int, expense_info: str):
+    async def create_expense(cls, session: Session, telegram_id: int, expense_info: str):
         logger.info("Creating expense")
         try:
             # Verifies if the user is in the database (enabled for using the system)
@@ -21,27 +21,20 @@ class ExpenseService:
             if not user:
                 raise Exception("User not found")
 
-            logger.info("FIRST MODEL START")
-            expense = ModelsService.is_expense(expense_info)
-            logger.info("FIRST MODEL END")
+            expense = await ModelsService.is_expense(expense_info)
 
             if not expense.is_expense:
                 logger.info(f"The input is not an expense: {expense_info}")
                 return {}
 
-            logger.info("Expense found")
-            logger.info("SECOND MODEL START")
-            expense_values = ModelsService.get_expense_values(expense_info)
-            logger.info("SECOND MODEL END")
-            logger.info(f"Expense values: {expense_values}")
+            #expense_values = ModelsService.get_expense_values(expense_info)
+            #logger.info(f"Expense values: {expense_values}")
+            # Mode 2 and 3 are excecuted at the same time
+            expense_values, category_classification = await ModelsService.extract_and_categorize(expense_info)
 
             if not expense_values.amount:
                 raise Exception("Invalid amount")
-
-            logger.info("Expense data extracted successfully")
-            logger.info("THIRD MODEL START")
-            category_clasification = ModelsService.get_expense_category(expense_values.description)
-            logger.info("THIRD MODEL END")
+            #category_classification = ModelsService.get_expense_category(expense_values.description)
 
             """            
             In order to make sure the expense is saved, we set 'Other' as the default category the
@@ -52,7 +45,7 @@ class ExpenseService:
                 # .capitalize() for the text to start with a capital letter
                 "description": expense_values.description.capitalize(),
                 "amount": expense_values.amount,
-                "category": "Other" if not category_clasification.category else category_clasification.category,
+                "category": "Other" if not category_classification.category else category_classification.category,
                 "added_at": dt.datetime.now()
             }
 

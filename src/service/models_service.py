@@ -1,21 +1,45 @@
-from src.data.schemas import ExtractedExpense, CategoryClassification, ExpenseClassification
+import time
+import asyncio
 from src.models.chains_registry import (
     is_expense_pipeline,
     expense_extraction_pipeline,
-    category_classification_pipeline,
+    category_classification_pipeline
 )
+from src.data.schemas import ExtractedExpense, CategoryClassification
+from src.utils.logger import logger
 
 
 class ModelsService:
 
     @classmethod
-    def is_expense(cls, text: str) -> ExpenseClassification:
-        return is_expense_pipeline.invoke({"message": text})
+    async def is_expense(cls, text: str) -> bool:
+        start = time.perf_counter()
+        is_expense = await is_expense_pipeline.ainvoke({"message": text})
+        end = time.perf_counter()
+        logger.info(f"Modelo 1 (¿es gasto?): {end - start:.2f} segundos")
+        return is_expense
 
     @classmethod
-    def get_expense_values(cls, expense: str) -> ExtractedExpense:
-        return expense_extraction_pipeline.invoke({"message": expense})
+    async def get_expense_values(cls, expense: str) -> ExtractedExpense:
+        start = time.perf_counter()
+        expense_values = await expense_extraction_pipeline.ainvoke({"message": expense})
+        end = time.perf_counter()
+        logger.info(f"Modelo 2 (extracción): {end - start:.2f} segundos")
+        return expense_values
 
     @classmethod
-    def get_expense_category(cls, expense_description: str) -> CategoryClassification:
-        return category_classification_pipeline.invoke({"message": expense_description})
+    async def get_expense_category(cls, expense_description: str) -> CategoryClassification:
+        start = time.perf_counter()
+        expense_category = await category_classification_pipeline.ainvoke({"message": expense_description})
+        end = time.perf_counter()
+        logger.info(f"Modelo 3 (categoría): {end - start:.2f} segundos")
+        return expense_category
+
+    @classmethod
+    async def extract_and_categorize(cls, expense: str):
+        """
+        Excecutes two methods at the same time
+        """
+        values_task = cls.get_expense_values(expense)
+        category_task = cls.get_expense_category(expense)
+        return await asyncio.gather(values_task, category_task)

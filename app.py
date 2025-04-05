@@ -1,11 +1,11 @@
+import asyncio
+
+from flask import Flask, jsonify, request
 from sqlalchemy.orm import Session
 
-from src.service.expenses_service import ExpenseService
 from src.database.config import SessionLocal
-from flask import Flask, jsonify, request
-
+from src.service.expenses_service import ExpensesService
 from src.service.users_service import UsersService
-from src.utils.logger import logger
 
 app = Flask(__name__)
 
@@ -27,9 +27,16 @@ def health():
 @app.route("/api/create/expenses", methods=['POST'])
 def create_expense():
     try:
-        data = request.json
-        res = ExpenseService.create_expense(session, data["telegram_id"], data["text"])
-        return res
+        body = request.get_json()
+
+        response = asyncio.run(
+            ExpensesService.create_expense(
+                session=session,
+                telegram_id=body.get("telegram_id"),
+                expense_info=body.get("text")
+            )
+        )
+        return jsonify(response), 200
     except Exception as e:
         msg = f"Unable to create expense: {e}"
         return {"msg": msg}, 400
