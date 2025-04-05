@@ -51,6 +51,7 @@ class ExpenseService:
             }
 
             ExpensesDBService.create_expense(session, expense_info)
+            logger.info(f"RESPONSE: {expense_info}")
             return expense_info
         except Exception as e:
             logger.error(f"Error: {e}")

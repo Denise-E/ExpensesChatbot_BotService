@@ -3,6 +3,8 @@ from sqlalchemy.orm import Session
 from src.service.expenses_service import ExpenseService
 from src.database.config import SessionLocal
 from flask import Flask, jsonify, request
+
+from src.service.users_service import UsersService
 from src.utils.logger import logger
 
 app = Flask(__name__)
@@ -30,6 +32,17 @@ def create_expense():
         return res
     except Exception as e:
         msg = f"Unable to create expense: {e}"
+        return {"msg": msg}, 400
+
+
+@app.route("/api/create/users", methods=['POST'])
+def create_user():
+    try:
+        data = request.json
+        res = UsersService.create_user(session, data)
+        return res
+    except Exception as e:
+        msg = f"Unable to create user: {e}"
         return {"msg": msg}, 400
 
 

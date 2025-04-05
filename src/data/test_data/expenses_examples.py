@@ -1,4 +1,4 @@
-test_messages = [
+TEST_EXPENSES = [
     # No expenses examples
     "Hey, how are you? 20 bucks",
     "Today is a nice day to eat burgers",
@@ -7,15 +7,14 @@ test_messages = [
     "I have 30,000 dollars in my account",
     "The other day I saw a t-shirt that cost 10,000",
     # Entertainment category examples
-    "I spend 10 dollars at the cinema today",
+    "I spend 10 dollars at the cinema today",  # TODO
     "Bought a video game on sale",
     "Subscribed to Netflix for 15 dollars",
     "Went to a concert and bought tickets",
-    "I paid for a Spotify Premium subscription",
+    "I paid for a Spotify Premium subscription, is only 5 bucks the first month",
     "Bought board games for game night",
-    "Paid to enter the amusement park",
-    "Rented a movie online",
-    "Got a monthly subscription to a comic service",
+    "Paid to enter the amusement park, it costs 5 cents",
+    "Rented a movie online for 20 bucks",
     "Went bowling and paid for two rounds",
     "I spend 10 dollars at the cinema today"
     "I paid for Netflix and Spotify yesterday, it costs me a hundred bucks",
