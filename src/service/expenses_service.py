@@ -11,7 +11,9 @@ from src.utils.logger import logger
 class ExpensesService:
 
     @classmethod
-    async def create_expense(cls, session: Session, telegram_id: int, expense_info: str):
+    async def create_expense(
+            cls, session: Session, telegram_id: int, expense_info: str
+    ):
         logger.info("Creating expense")
         try:
             # Verifies if the user is in the database (enabled for using the system)
@@ -27,18 +29,14 @@ class ExpensesService:
                 logger.info(f"The input is not an expense: {expense_info}")
                 return {}
 
-            #expense_values = ModelsService.get_expense_values(expense_info)
-            #logger.info(f"Expense values: {expense_values}")
-            # Mode 2 and 3 are excecuted at the same time
             expense_values, category_classification = await ModelsService.extract_and_categorize(expense_info)
 
             if not expense_values.amount:
                 raise Exception("Invalid amount")
-            #category_classification = ModelsService.get_expense_category(expense_values.description)
 
             """            
             In order to make sure the expense is saved, we set 'Other' as the default category the
-            category clasification model don´t return a category.
+            category classification model don´t return a category.
             """
             expense_info = {
                 "user_id": user.id,

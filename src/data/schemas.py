@@ -8,8 +8,12 @@ class ExpenseClassification(BaseModel):
 
 
 class ExtractedExpense(BaseModel):
-    amount: Optional[float] = Field(None, description="The amount of money spent")
-    description: Optional[str] = Field(None, description="What the expense was for")
+    amount: Optional[float] = Field(
+        None, description="The amount of money spent"
+    )
+    description: Optional[str] = Field(
+        None, description="What the expense was for"
+    )
 
 
 class CategoryClassification(BaseModel):

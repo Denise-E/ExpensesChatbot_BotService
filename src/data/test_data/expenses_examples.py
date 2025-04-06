@@ -11,7 +11,7 @@ TEST_EXPENSES = [
     "Bought a video game on sale",
     "Subscribed to Netflix for 15 dollars",
     "Went to a concert and bought tickets",
-    "I paid for a Spotify Premium subscription, is only 5 bucks the first month",
+    "I paid for a Spotify Premium subscription, is 5 bucks the first month",
     "Bought board games for game night",
     "Paid to enter the amusement park, it costs 5 cents",
     "Rented a movie online for 20 bucks",
