@@ -5,14 +5,14 @@ from src.models.chains_registry import (
     expense_extraction_pipeline,
     category_classification_pipeline
 )
-from src.data.schemas import ExtractedExpense, CategoryClassification
+from src.data.schemas import ExtractedExpense, CategoryClassification, ExpenseClassification
 from src.utils.logger import logger
 
 
 class ModelsService:
 
     @classmethod
-    async def is_expense(cls, text: str) -> bool:
+    async def is_expense(cls, text: str) -> ExpenseClassification:
         start = time.perf_counter()
         is_expense = await is_expense_pipeline.ainvoke({"message": text})
         end = time.perf_counter()
