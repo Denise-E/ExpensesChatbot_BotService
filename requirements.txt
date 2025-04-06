@@ -5,3 +5,4 @@ langchain_ollama==0.3.0
 pydantic==2.11.2
 pytest==8.3.5
 SQLAlchemy==2.0.40
+psycopg2==2.9.10

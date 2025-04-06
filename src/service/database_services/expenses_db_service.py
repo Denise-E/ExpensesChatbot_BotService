@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 
 from src.database.models.expenses import Expenses
+from src.database.models.users import Users
 from src.utils.logger import logger
 
 
@@ -15,4 +16,22 @@ class ExpensesDBService:
             session.commit()
         except Exception as e:
             logger.error(f"Unable to create expense on database: {e}")
+            session.rollback()
+
+    @classmethod
+    def get_user_expenses(cls, session: Session, telegram_id: str) -> list:
+        try:
+            logger.info("Getting user expenses from database")
+            expenses = (
+                session.query(
+                    Expenses
+                ).join(
+                    Users, Users.id == Expenses.user_id
+                ).filter(
+                    Users.telegram_id == telegram_id
+                ).all()
+            )
+            return expenses
+        except Exception as e:
+            logger.error(f"Unable to get expenses from database: {e}")
             session.rollback()

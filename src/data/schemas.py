@@ -1,7 +1,7 @@
 import datetime
+from typing import Optional, List
 
 from pydantic import BaseModel, Field
-from typing import Optional
 
 
 # LLM Models Schemas
@@ -12,7 +12,7 @@ class ExpenseClassification(BaseModel):
 
 
 class ExtractedExpense(BaseModel):
-    amount: Optional[float] = Field(None, description="The amount of money spent")
+    amount: Optional[str] = Field(None, description="The amount of money spent")
     description: Optional[str] = Field(None, description="What the expense was for")
 
 
@@ -30,10 +30,29 @@ class CreateExpenseInput(BaseModel):
 
 class CreateExpenseOutput(BaseModel):
     user_id: int = Field(..., description="Internal ID of the user in the database")
-    amount: float = Field(..., description="Amount extracted from the message")
+    amount: str = Field(..., description="Amount extracted from the message")
     description: str = Field(..., description="Description of the expense extracted from the message")
     category: str = Field(..., description="Category assigned to the expense")
     added_at: datetime.datetime = Field(..., description="Datetime when the expense was added")
+
+
+# Get All User Expenses Endpoint Schemas
+
+class GetAllUserExpensesInput(BaseModel):
+    telegram_id: str = Field(..., description="Telegram ID of the user")
+
+
+class Expense(BaseModel):
+    id: int = Field(..., description="Unique identifier of the expense")
+    user_id: int = Field(..., description="ID of the user who added the expense")
+    description: str = Field(..., description="Description of the expense")
+    amount: str = Field(..., description="Amount spent", example=59.99)
+    category: str = Field(..., description="Category of the expense", example="Food")
+    added_at: datetime.datetime = Field(..., description="Timestamp when the expense was added")
+
+
+class GetAllUserExpensesOutput(BaseModel):
+    expenses: List[Expense] = Field(..., description="List of user expenses")
 
 
 # Create User Endpoint Schemas

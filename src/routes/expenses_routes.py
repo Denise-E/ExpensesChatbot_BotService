@@ -3,7 +3,7 @@ import logging
 
 from flask import Blueprint, request, jsonify
 import app
-from src.data.schemas import CreateExpenseOutput, CreateExpenseInput
+from src.data.schemas import CreateExpenseOutput, CreateExpenseInput, GetAllUserExpensesInput, GetAllUserExpensesOutput
 from src.service.expenses_service import ExpensesService
 
 expenses = Blueprint("expenses", __name__)
@@ -32,6 +32,28 @@ def create_expense():
         output = CreateExpenseOutput(**response)
 
         return jsonify(output.dict()), 200
+    except Exception as e:
+        logging.error(f"Unable to create expense: {e}")
+        return {"msg": str(e)}, 400
+
+
+@expenses.route("/get/all", methods=['POST'])
+def get_user_expenses():
+    try:
+        body = request.get_json()
+
+        try:
+            validated_body = GetAllUserExpensesInput(**body)
+        except Exception as e:
+            logging.info(f"Pydantic input error: {e}")
+            raise Exception("Invalid input")
+
+        session = app.session
+
+        response = ExpensesService.get_user_expenses(session, validated_body.telegram_id)
+
+        validated = GetAllUserExpensesOutput(expenses=response).dict()
+        return jsonify(validated), 200
     except Exception as e:
         logging.error(f"Unable to create expense: {e}")
         return {"msg": str(e)}, 400

@@ -2,6 +2,7 @@ import datetime as dt
 
 from sqlalchemy.orm import Session
 
+from src.data.schemas import Expense
 from src.service.database_services.expenses_db_service import ExpensesDBService
 from src.service.database_services.users_db_service import UsersDBService
 from src.service.models_service import ModelsService
@@ -49,6 +50,33 @@ class ExpensesService:
 
             ExpensesDBService.create_expense(session, expense_info)
             return expense_info
+        except Exception as e:
+            logger.error(f"Error: {e}")
+            raise Exception(e)
+
+    @classmethod
+    def get_user_expenses(cls, session: Session, telegram_id: str) -> list:
+        try:
+            logger.info("Getting user expenses")
+            db_expenses = ExpensesDBService.get_user_expenses(session, telegram_id)
+
+            if not db_expenses:
+                return []
+
+            expenses = []
+            for expense in db_expenses:
+                expense_data = {
+                    "id": expense.id,
+                    "user_id": expense.user_id,
+                    "description": expense.description,
+                    "amount": expense.amount,
+                    "category": expense.category,
+                    "added_at": expense.added_at
+                }
+                validated = Expense(**expense_data).dict()
+                expenses.append(validated)
+
+            return expenses
         except Exception as e:
             logger.error(f"Error: {e}")
             raise Exception(e)
