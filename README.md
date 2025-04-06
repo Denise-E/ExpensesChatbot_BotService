@@ -14,7 +14,9 @@ It leverages a series of three lightweight AI models running locally through Oll
 - **Ollama**: Local LLM runner that allows you to use models like Mistral or LLaMA3 offline.
 - **Flask-Swagger-UI**: Tool used to expose Swagger documentation via a simple route.
 
-## Running the project
+## Running the Project
+
+### Clone the repository
 
 ### 🐍 Create and Activate a Virtual Environment
 
@@ -41,7 +43,8 @@ ollama run mistral
 ```
 
 ### .env Variables
-You will need just two variables in order to 
+Create a .env file in the root directory with the following content:
+
 DB_PASS
 DB_CONNECTION_STR=postgresql://<your_database_string>
 
