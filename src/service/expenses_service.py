@@ -12,7 +12,7 @@ class ExpensesService:
 
     @classmethod
     async def create_expense(
-            cls, session: Session, telegram_id: int, expense_info: str
+            cls, session: Session, telegram_id: str, expense_info: str
     ):
         logger.info("Creating expense")
         try:
@@ -48,7 +48,6 @@ class ExpensesService:
             }
 
             ExpensesDBService.create_expense(session, expense_info)
-            logger.info(f"RESPONSE: {expense_info}")
             return expense_info
         except Exception as e:
             logger.error(f"Error: {e}")

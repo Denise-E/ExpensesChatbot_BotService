@@ -49,6 +49,6 @@ class ModelsService:
         """
         Executes two methods at the same time
         """
-        values_task = cls.get_expense_values(expense)
         category_task = cls.get_expense_category(expense)
+        values_task = cls.get_expense_values(expense)
         return await asyncio.gather(values_task, category_task)

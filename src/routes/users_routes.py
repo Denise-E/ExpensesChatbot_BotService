@@ -1,6 +1,9 @@
-from flask import Blueprint, request
+import logging
+
+from flask import Blueprint, request, jsonify
 
 import app
+from src.data.schemas import CreateUserInput, CreateUserOutput
 from src.service.users_service import UsersService
 
 users = Blueprint("users", __name__)
@@ -9,10 +12,19 @@ users = Blueprint("users", __name__)
 @users.route("/create", methods=['POST'])
 def create_user():
     try:
+        body = request.get_json()
+        try:
+            validated_body = CreateUserInput(**body)
+        except Exception as e:
+            logging.info(f"Pydantic input error: {e}")
+            raise Exception("Invalid input")
+
         session = app.session
-        data = request.get_json()
-        res = UsersService.create_user(session, data)
-        return res
+        response = UsersService.create_user(session, validated_body.dict())
+
+        output = CreateUserOutput(**response)
+
+        return jsonify(output.dict()), 200
     except Exception as e:
-        msg = f"Unable to create user: {e}"
-        return {"msg": msg}, 400
+        logging.error(f"Unable to create user: {e}")
+        return {"msg": str(e)}, 400
