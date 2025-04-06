@@ -3,7 +3,7 @@ from langchain_core.runnables import RunnableSequence
 from langchain_ollama import ChatOllama
 
 from src.data.schemas import ExtractedExpense, CategoryClassification, ExpenseClassification
-from src.models.prompts.category_classifier_prompt import category_classifier_prompt
+from src.models.prompts.expense_category_classifier_prompt import category_classifier_prompt
 from src.models.prompts.expense_data_analyzer import data_analyzer_prompt
 from src.models.prompts.is_expense_prompt import is_expense_prompt
 
