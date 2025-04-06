@@ -18,6 +18,8 @@ It leverages a series of three lightweight AI models running locally through Oll
 
 ### Clone the repository
 
+### Make sure to have python downloaded https://www.python.org/downloads. This project was made with python 3.11
+
 ### 🐍 Create and Activate a Virtual Environment
 
 ```bash
@@ -45,8 +47,8 @@ ollama run mistral
 ### .env Variables
 Create a .env file in the root directory with the following content:
 
-DB_PASS
-DB_CONNECTION_STR=postgresql://<your_database_string>
+DB_PASS=your_database_password
+DB_CONNECTION_STR=postgresql://your_database_string
 
 ### 🔑 Database Setup
 
@@ -66,6 +68,11 @@ CREATE TABLE expenses (
 "added_at" timestamp NOT NULL
 );
 
+### 🚀 Run the Project
+
+```bash
+flask run
+```
 
 ### 📨 Endpoints
 
@@ -98,6 +105,43 @@ This endpoint analyzes a user message to determine if it refers to an expense. I
 
 #### 2. POST /api/users/create
 
-#### 3. POST /api/expenses/get/all
+This endpoint registers a new Telegram user in the database using their unique telegram_id. If the user already exists, the request is ignored or handled accordingly.
 
+**Request Body**:
 
+```json
+{
+  "telegram_id": "1234567891",
+}
+```
+
+**Response**:
+
+```json
+{
+    "id": 1,
+    "telegram_id": "1234567891"
+}
+```
+
+#### 3. GET /api/expenses/<telegram_id>/all
+
+This endpoint retrieves all the expenses associated with a given Telegram user. It expects the telegram_id as a path parameter and returns a list of all recorded expenses for that user.
+
+**Response**:
+
+```json
+{
+    "expenses": [
+        {
+            "added_at": "Thu, 03 Apr 2025 09:51:35 GMT",
+            "amount": "$150.02",
+            "category": "General",
+            "description": "example",
+            "id": 1,
+            "user_id": 1
+        },
+]
+```
+
+If the user don't have any expense saved, the endpoint will return an empty list in the key "expenses".
