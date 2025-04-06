@@ -141,7 +141,8 @@ This endpoint retrieves all the expenses associated with a given Telegram user. 
             "id": 1,
             "user_id": 1
         },
-]
+  ]
+}
 ```
 
 If the user don't have any expense saved, the endpoint will return an empty list in the key "expenses".
