@@ -3,7 +3,7 @@ import asyncio
 from src.models.chains_registry import (
     is_expense_pipeline,
     expense_extraction_pipeline,
-    category_classification_pipeline
+    expense_category_classification_pipeline
 )
 from src.data.schemas import ExtractedExpense, CategoryClassification, ExpenseClassification
 from src.utils.logger import logger
@@ -36,7 +36,7 @@ class ModelsService:
         logger.info("Getting expense category with model")
 
         start = time.perf_counter()
-        expense_category = await category_classification_pipeline.ainvoke(
+        expense_category = await expense_category_classification_pipeline.ainvoke(
             {"message": expense_description}
         )
         end = time.perf_counter()

@@ -28,7 +28,8 @@ async def main():
             logger.warning(f"    ➤ Excepción: {e}")
 
     examples_quantity = len(is_expense_examples)
-    logger.info(f"Successfull test {passed} out of {examples_quantity} - Equals a {passed*100/examples_quantity}% "
+    percentage = passed*100/examples_quantity
+    logger.info(f"Successfull tests: {passed} out of {examples_quantity} - Equals a {round(percentage, 2)}% "
                 f"assertion")
 
 asyncio.run(main())

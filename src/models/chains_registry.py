@@ -23,5 +23,5 @@ expense_validator_parser = PydanticOutputParser(pydantic_object=ExpenseClassific
 
 # Pipelines (prompt | model | parser)
 expense_extraction_pipeline = data_analyzer_prompt | llm_mistral | extract_parser
-category_classification_pipeline = category_classifier_prompt | llm_mistral | category_parser
+expense_category_classification_pipeline = category_classifier_prompt | llm_mistral | category_parser
 is_expense_pipeline = is_expense_prompt | llm_llama3 | expense_validator_parser
