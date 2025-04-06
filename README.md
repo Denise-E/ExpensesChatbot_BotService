@@ -1,9 +1,10 @@
 # ExpensesChatbot_BotService
-This service is tasked with the analysis of incoming messages to identify and extract expense details before persisting these details into the database.
 
-ExpensesChatbot_BotService is responsible for analyzing incoming messages to identify and extract expense details, which are then stored in a database.
+ExpensesChatbot_BotService is a Python-based backend service responsible for analyzing and interpreting incoming Telegram messages to identify, extract, and classify expense data. It leverages a pipeline of lightweight local language models orchestrated via LangChain and executed through Ollama to determine whether a message is information about an expense, extract relevant details (such as amount and description), categorize the expense, and store the results in a PostgreSQL database. It serves as the core processing engine of the ExpensesChatbot system, communicating with the ConnectorService through a REST API.
 
-It leverages a series of three lightweight AI models running locally through Ollama, built using LangChain and validated using Pydantic. The application is implemented in Python with Flask and integrates with a PostgreSQL database via SQLAlchemy.
+### Related Repository
+
+- [ExpensesChatbot_ConnectorService](https://github.com/Denise-E/ExpensesChatbot_ConnectorService): Handles Telegram interactions and forwards messages to this service for processing.
 
 ## ⚙️ Technologies Used
 
@@ -18,7 +19,9 @@ It leverages a series of three lightweight AI models running locally through Oll
 
 ### Clone the repository
 
-### Make sure to have python downloaded https://www.python.org/downloads. This project was made with python 3.11
+### Prerequisites
+
+Ensure you have [Python 3.11](https://www.python.org/downloads) or higher installed on your system.
 
 ### 🐍 Create and Activate a Virtual Environment
 
