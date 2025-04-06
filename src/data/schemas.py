@@ -38,10 +38,6 @@ class CreateExpenseOutput(BaseModel):
 
 # Get All User Expenses Endpoint Schemas
 
-class GetAllUserExpensesInput(BaseModel):
-    telegram_id: str = Field(..., description="Telegram ID of the user")
-
-
 class Expense(BaseModel):
     id: int = Field(..., description="Unique identifier of the expense")
     user_id: int = Field(..., description="ID of the user who added the expense")
