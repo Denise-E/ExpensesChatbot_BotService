@@ -15,10 +15,8 @@ is_expense_examples = [
     {"input": "Paid to enter the amusement park, it costs 5 cents", "expected": {"is_expense": True}},
     {"input": "Rented a movie online for 20 bucks", "expected": {"is_expense": True}},
     {"input": "Went bowling and paid for two rounds 10 bucks", "expected": {"is_expense": True}},
-    {"input": "I spend 10 dollars at the cinema today", "expected": {"is_expense": True}},
     {
-        "input": "I spend 10 dollars at the cinema todayI paid for Netflix and Spotify yesterday, it costs me a "
-                 "hundred bucks",
+        "input": "I paid for Netflix and Spotify yesterday, it costs me a hundred bucks",
         "expected": {"is_expense": True}},
     {"input": "I bought a 30 bucks steak with potatoes", "expected": {"is_expense": True}},
     {"input": "I spent 10 dollars on lunch at the cafe", "expected": {"is_expense": True}},
