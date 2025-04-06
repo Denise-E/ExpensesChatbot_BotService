@@ -11,7 +11,7 @@ class UsersDBService:
         try:
             logger.info("Getting user from database")
             telegram_id = str(telegram_id)
-            return session.query(Users.id).filter(Users.telegram_id == telegram_id).one_or_none()
+            return session.query(Users).filter(Users.telegram_id == telegram_id).one_or_none()
         except Exception as e:
             logger.error(f"Unable to get user from database: {e}")
             session.rollback()
