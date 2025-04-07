@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 from typing import Optional, List
 
 from pydantic import BaseModel, Field
@@ -33,7 +33,7 @@ class CreateExpenseOutput(BaseModel):
     amount: str = Field(..., description="Amount extracted from the message")
     description: str = Field(..., description="Description of the expense extracted from the message")
     category: str = Field(..., description="Category assigned to the expense")
-    added_at: datetime.datetime = Field(..., description="Datetime when the expense was added")
+    added_at: datetime = Field(..., description="Datetime when the expense was added")
 
 
 # Get All User Expenses Endpoint Schemas
@@ -44,7 +44,7 @@ class Expense(BaseModel):
     description: str = Field(..., description="Description of the expense")
     amount: str = Field(..., description="Amount spent", example=59.99)
     category: str = Field(..., description="Category of the expense", example="Food")
-    added_at: datetime.datetime = Field(..., description="Timestamp when the expense was added")
+    added_at: datetime = Field(..., description="Timestamp when the expense was added")
 
 
 class GetAllUserExpensesOutput(BaseModel):
