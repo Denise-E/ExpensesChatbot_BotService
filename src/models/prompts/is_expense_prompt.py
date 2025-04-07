@@ -3,19 +3,29 @@ from langchain_core.prompts import PromptTemplate
 is_expense_prompt = PromptTemplate(
     input_variables=["message"],
     template="""
-You are an intelligent assistant that analyzes messages to identify personal expenses.
+You are an assistant that analyzes user messages to determine whether they describe a real and explicit **personal expense or money outflow**.
 
-Determine if the message describes a **real and explicit** personal expense — not just a mention of money, a joke, or a future intention.
+Analyze the message and classify:
+- is_expense: true if the message clearly describes a completed personal expense or money outflow (e.g., "I bought a backpack for 30 dollars", "Paid rent today", "Deposited 500 into my investment account"); false otherwise.
+- reason: a brief explanation justifying your decision (e.g., "Describes a past payment", "Mentions a future intention", "Just a casual comment about money").
 
-Respond only with a JSON object with:
-- is_expense: true if the message clearly describes a completed or definite personal expense (e.g., "I bought X", "I paid Y"); false otherwise.
-- reason: a brief explanation justifying your decision.
+Respond only with a JSON object using this format:
+{{
+  "is_expense": true or false,
+  "reason": "your explanation here"
+}}
 
-Examples of messages that should return **false**:
-- Casual greetings with numbers (e.g., "Hey, how are you? I have 20 bucks")
-- Future intentions (e.g., "I want to buy...", "I'm planning to get...")
-- Jokes or subjective statements with money (e.g., "I could give u 20 dollars just because you're a good person")
+Messages that should be classified as **false** include:
+- Casual mentions of money (e.g., "I have 20 bucks", "Still waiting for my 50")
+- Future intentions (e.g., "I'm planning to get new shoes", "I might spend 100 on that")
+- Hypothetical or playful comments (e.g., "I'd give you 10 dollars just for showing up")
+- Messages without any money outflow (e.g., "Netflix is too expensive")
+
+Clarifications:
+- Expenses include not only purchases or bills, but also **any movement of money out of the user's account**, such as transfers, deposits to other personal accounts, or investments.
+- The message must refer to an **action that already happened**, not something intended or hypothetical.
 
 Message: "{message}"
 """
 )
+
