@@ -4,6 +4,9 @@ import sys
 from src.data.test_data.expense_category_classifier_examples import expense_category_classifier_examples
 from src.models.chains_registry import expense_category_classification_pipeline
 from src.utils.logger import logger
+from src.data.categories import CATEGORIES
+
+categories_str = ", ".join(CATEGORIES)
 
 if sys.platform.startswith("win"):
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
@@ -13,7 +16,7 @@ async def main():
     passed = 0
     for i, example in enumerate(expense_category_classifier_examples, start=1):
         try:
-            result = await expense_category_classification_pipeline.ainvoke({"message": example["input"]})
+            result = await expense_category_classification_pipeline.ainvoke({"message": example["input"], "categories": categories_str})
             expected = example["expected"]["category"]
             received = result.category
 
@@ -24,7 +27,7 @@ async def main():
                 logger.warning(f"[{i}] ❌ FAIL | Input: {example['input']} | Result {received}")
                 logger.info(f"    ➤ Esperado: {expected}, Recibido: {received}")
         except Exception as e:
-            logger.warning(f"[{i}] ❌ ERROR | Input: {example['input']} - {result.description}")
+            logger.warning(f"[{i}] ❌ ERROR | Input: {example['input']}")
             logger.warning(f"    ➤ Excepción: {e}")
 
     examples_quantity = len(expense_category_classifier_examples)

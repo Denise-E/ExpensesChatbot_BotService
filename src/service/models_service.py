@@ -7,6 +7,9 @@ from src.models.chains_registry import (
 )
 from src.data.schemas import ExtractedExpense, CategoryClassification, ExpenseClassification
 from src.utils.logger import logger
+from src.data.categories import CATEGORIES
+
+categories_str = ", ".join(CATEGORIES)
 
 
 class ModelsService:
@@ -37,7 +40,7 @@ class ModelsService:
 
         start = time.perf_counter()
         expense_category = await expense_category_classification_pipeline.ainvoke(
-            {"message": expense_description}
+            {"message": expense_description, "categories": categories_str}
         )
         end = time.perf_counter()
 
