@@ -10,7 +10,7 @@ expense_analyzer_examples = [
     {"input": "I paid for a Spotify Premium subscription, is 5 bucks the first month",
      "expected": {"amount": 5.0, "description": "Spotify Premium subscription"}},
     {"input": "Bought board games for game night for just3 dollars",
-     "expected": {"amount": 3.0, "description": "Board games for game night"}},
+     "expected": {"amount": 3.0, "description": "Board games"}},
     {"input": "Paid to enter the amusement park, it costs 5 cents",
      "expected": {"amount": 0.05, "description": "Amusement park"}},
     {"input": "Rented a movie online for 20 bucks", "expected": {"amount": 20.0, "description": "Movie rental"}},
@@ -21,7 +21,7 @@ expense_analyzer_examples = [
                  "hundred bucks",
         "expected": {"amount": 100.0, "description": "Netflix and Spotify"}},
     {"input": "I bought a 30 bucks steak with potatoes",
-     "expected": {"amount": 30.0, "description": "Steak with potatoes"}},
+     "expected": {"amount": 30.0, "description": "Steak and potatoes"}},
     {"input": "I spent 10 dollars on lunch at the cafe",
      "expected": {"amount": 10.0, "description": "Lunch at the cafe"}},
     {"input": "Got sushi delivered for dinner for 80 dollars",
@@ -48,7 +48,7 @@ expense_analyzer_examples = [
     {
         "input": "Bought some new curtains for the living room, it costs around 50 dollars. I don't know if it was "
                  "expensive or not",
-        "expected": {"amount": 50.0, "description": "New curtains"}},
+        "expected": {"amount": 50.0, "description": "Curtains"}},
     {"input": "I hired a plumber to fix a leaking pipe at home, I paid him 30 dollars",
      "expected": {"amount": 30.0, "description": "Plumber to fix a leaking pipe at home"}},
     {"input": "Paid 200 dollars for home insurance", "expected": {"amount": 200.0, "description": "Home insurance"}},

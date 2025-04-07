@@ -38,7 +38,7 @@ class ExpensesService:
             expense_info = {
                 "user_id": user.id,
                 # .capitalize() for the text to start with a capital letter
-                "description": expense_values.description.capitalize(),
+                "description": expense_values.description.strip().capitalize(),
                 "amount": expense_values.amount,
                 "category": "Other" if not category_classification.category else category_classification.category,
                 "added_at": dt.datetime.now()
@@ -65,7 +65,7 @@ class ExpensesService:
                 expense_data = {
                     "id": expense.id,
                     "user_id": expense.user_id,
-                    "description": expense.description,
+                    "description": expense.description.strip().capitalize(),
                     "amount": expense.amount,
                     "category": expense.category,
                     "added_at": expense.added_at

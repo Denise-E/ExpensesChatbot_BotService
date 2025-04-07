@@ -20,7 +20,8 @@ async def main():
             if received == str(expected):  # Due to changes on amount type for SQLAlchemy managment
                 logger.info(f"[{i}] ✅ OK | Input: {example['input']} | Result {received}")
                 logger.info(
-                    f"Description expected -> {example["expected"]["description"]} - Description recived -> {result.description}")
+                    f"Description expected -> {example["expected"]["description"]} - Description recived -> {result.description}"
+                )
                 passed += 1
             else:
                 logger.warning(f"[{i}] ❌ FAIL | Input: {example['input']} | Result {received}")
