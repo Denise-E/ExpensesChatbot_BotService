@@ -1,3 +1,4 @@
+from sqlalchemy import desc
 from sqlalchemy.orm import Session
 
 from src.database.models.expenses import Expenses
@@ -29,7 +30,7 @@ class ExpensesDBService:
                     Users, Users.id == Expenses.user_id
                 ).filter(
                     Users.telegram_id == telegram_id
-                ).all()
+                ).order_by(desc(Expenses.added_at)).all()
             )
             return expenses
         except Exception as e:
