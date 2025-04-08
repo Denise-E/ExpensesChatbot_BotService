@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 
 from src.database.models.users import Users
+from src.exceptions.users_exceptions import UserNotFoundException
 from src.service.database_services.users_db_service import UsersDBService
 from src.utils.logger import logger
 
@@ -36,6 +37,6 @@ class UsersService:
 
         # If the user is not in the database, it throws an exception
         if not user:
-            raise Exception("User not found")
+            raise UserNotFoundException("User not found")
 
         return user

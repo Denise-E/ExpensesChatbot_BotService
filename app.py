@@ -2,6 +2,7 @@ from flask import Flask
 
 from src.database.config import SessionLocal
 from src.routes.expenses_routes import expenses
+from src.routes.swagger_routes import swagger_json_blueprint, swaggerui_blueprint
 from src.routes.users_routes import users
 
 app = Flask(__name__)
@@ -13,6 +14,9 @@ session = SessionLocal()
 app.register_blueprint(expenses, url_prefix="/api/expenses")
 app.register_blueprint(users, url_prefix="/api/users")
 
+# Swagger route
+app.register_blueprint(swagger_json_blueprint)
+app.register_blueprint(swaggerui_blueprint, url_prefix="/swagger")
 
 # Health route to check if the API is up
 @app.route("/api/health", methods=['GET'])

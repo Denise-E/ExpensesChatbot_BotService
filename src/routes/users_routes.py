@@ -29,4 +29,4 @@ def create_user():
         return jsonify(output.dict()), 200
     except Exception as e:
         logging.error(f"Unable to create user: {e}")
-        return {"msg": str(e)}, 400
+        return {"error": str(e)}, 400

@@ -14,7 +14,7 @@ class UsersDBService:
         except Exception as e:
             logger.error(f"Unable to get user from database: {e}")
             session.rollback()
-            raise Exception(e)
+            raise Exception("Unable to get user")
 
     @classmethod
     def create_user(cls, session: Session, user_info: dict) -> Users:
@@ -27,4 +27,4 @@ class UsersDBService:
         except Exception as e:
             logger.error(f"Unable to create user in database: {e}")
             session.rollback()
-            raise Exception(e)
+            raise Exception("Unable to create user")

@@ -37,3 +37,4 @@ class ExpensesDBService:
         except Exception as e:
             logger.error(f"Unable to get expenses from database: {e}")
             session.rollback()
+            raise Exception("Unable to get expenses")

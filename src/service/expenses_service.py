@@ -44,7 +44,7 @@ class ExpensesService:
             return expense_info
         except Exception as e:
             logger.error(f"Error: {e}")
-            raise Exception(e)
+            raise e
 
     @classmethod
     def get_user_expenses(cls, session: Session, telegram_id: str) -> list:
@@ -77,4 +77,4 @@ class ExpensesService:
             return expenses
         except Exception as e:
             logger.error(f"Error: {e}")
-            raise Exception(e)
+            raise e
