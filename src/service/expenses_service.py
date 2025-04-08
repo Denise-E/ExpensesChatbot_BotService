@@ -13,34 +13,27 @@ from src.utils.logger import logger
 class ExpensesService:
 
     @classmethod
-    async def create_expense(
-            cls, session: Session, telegram_id: str, expense_info: str
-    ):
+    def create_expense(cls, session: Session, telegram_id: str, expense_info: str):
         logger.info("Creating expense")
+
         try:
             user = cls.validate_user(session, telegram_id)
 
-            expense = await ModelsService.is_expense(expense_info)
+            # Llamada al modelo unificado (solo una vez)
+            result = ModelsService.analyze_expense_model(expense_info)
 
-            if not expense.is_expense:
+            if not result.is_expense:
                 logger.info(f"The input is not an expense: {expense_info}")
-                return {}
+                raise Exception("Input is not an expense")
 
-            expense_values, category_classification = await ModelsService.extract_and_categorize(expense_info)
-
-            if not expense_values.amount:
+            if not result.amount:
                 raise Exception("Invalid amount")
 
-            """            
-            In order to make sure the expense is saved, we set 'Other' as the default category the
-            category classification model don´t return a category.
-            """
             expense_info = {
                 "user_id": user.id,
-                # .capitalize() for the text to start with a capital letter
-                "description": expense_values.description.strip().capitalize(),
-                "amount": expense_values.amount,
-                "category": "Other" if not category_classification.category else category_classification.category,
+                "description": result.description.strip().capitalize(),
+                "amount": result.amount,
+                "category": result.category or "Other",
                 "added_at": dt.datetime.now()
             }
 

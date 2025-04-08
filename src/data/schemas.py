@@ -1,24 +1,19 @@
 from datetime import datetime
-from typing import Optional, List
+from typing import List
+from typing import Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
+from pydantic import Field
 
 
 # LLM Models Schemas
-
-class ExpenseClassification(BaseModel):
+class ExpenseModelOutput(BaseModel):
     is_expense: bool = Field(..., description="Whether the message contains an expense")
     reason: str = Field(..., description="Justification for the classification decision")
-
-
-class ExtractedExpense(BaseModel):
     amount: Optional[str] = Field(None, description="The amount of money spent")
     description: Optional[str] = Field(None, description="What the expense was for")
-
-
-class CategoryClassification(BaseModel):
-    category: str = Field(..., description="Detected category for the expense")
-    reason: str = Field(..., description="Justification for the selected category")
+    category: Optional[str] = Field(None, description="Detected category for the expense")
+    category_reason: Optional[str] = Field(None, description="Justification for the selected category")
 
 
 # Create Expense Endpoint Schemas

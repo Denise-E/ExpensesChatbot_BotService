@@ -1,4 +1,3 @@
-import asyncio
 import logging
 
 from flask import Blueprint, request, jsonify
@@ -23,12 +22,10 @@ def create_expense():
 
         session = app.session
 
-        response = asyncio.run(
-            ExpensesService.create_expense(
-                session=session,
-                telegram_id=validated_body.telegram_id,
-                expense_info=validated_body.message
-            )
+        response = ExpensesService.create_expense(
+            session=session,
+            telegram_id=validated_body.telegram_id,
+            expense_info=validated_body.message
         )
         output = CreateExpenseOutput(**response)
 
