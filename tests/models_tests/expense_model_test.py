@@ -14,9 +14,11 @@ def main():
             expected_is_expense = example["expected"]["is_expense"]
             expected_amount = example["expected"]["amount"]
             expected_category = example["expected"]["category"]
+            expected_description = example["expected"]["description"]
             received_is_expense = result.is_expense
             received_amount = result.amount
             received_category = result.category
+            received_description = result.description
 
             is_expense_ok = received_is_expense == expected_is_expense
             amount_ok = received_amount == expected_amount
@@ -36,6 +38,8 @@ def main():
                 if expected_is_expense:
                     logger.warning(f"    ➤ Expected amount: {expected_amount}, Got: {received_amount}")
                     logger.warning(f"    ➤ Expected category: {expected_category}, Got: {received_category}")
+
+            logger.warning(f"    ➤ Expected description: {expected_description}, Got: {received_description}")
 
         except Exception as e:
             logger.warning(f"[{i}] ❌ ERROR | Input: {example['input']}")

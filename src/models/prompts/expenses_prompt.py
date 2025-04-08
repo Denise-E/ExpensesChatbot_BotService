@@ -24,10 +24,11 @@ Do **not** consider:
 
 ---
 
-2. **If `is_expense` is true**, extract: - "amount": the total spent, as a string. - If the original amount is an 
-integer, format it as `"X.0"` (e.g., `"20"` → `"20.0"`) **It can never end with two consecutive zeros**. - If the 
-amount has decimals, retain **all the decimals digit**, omitting trailing zeros (e.g., `"20.5"` → `"20.5"`, 
-`"30.55"` → `"30.55"`). - "description": short summary (e.g., "Lunch", "Netflix subscription")
+2. **If `is_expense` is true**, extract:
+- "amount": the total spent, as a string.
+  - If the original amount is an integer, format it as `"X.0"` (e.g., `"20"` → `"20.0"`). It can **never** end with two consecutive zeros.
+  - If the amount has decimals, retain **all** decimal digits, omitting trailing zeros (e.g., `"20.50"` → `"20.5"`, `"30.550"` → `"30.55"`).
+- "description": short summary (e.g., "Lunch", "Netflix subscription")
 
 If `is_expense` is false, set amount and description to `null`.
 
@@ -37,8 +38,16 @@ If `is_expense` is false, set amount and description to `null`.
 {categories}
 
 Return:
-- "category": one from the list above.
+- "category": one from the list above. **Never invent or infer categories that are not listed.**
 - "category_reason": explain your classification.
+
+Important clarifications:
+- Donations (e.g., "gave money", "donated", "helped someone financially") should be classified as **"Donations"** only if that category is present in the list.
+- Rent, mortgage, or utility bills should be classified as **"Housing"**, not "Donations".
+- If the message includes multiple expenses, classify based on the one that seems most relevant or most prominent.
+- If no category fits well, choose the one that is **closest in intent**, but do not invent new labels.
+- Do not output anything other than the JSON response.
+- Amount can´t be cero if it´s specify in the input
 
 If `is_expense` is false, set category and category_reason to `null`.
 
@@ -60,17 +69,17 @@ Response: {{
   "is_expense": true,
   "reason": "Describes a completed food expense",
   "amount": "10.0",
-  "description": "Had sushi with friends",
+  "description": "Sushi",
   "category": "Food",
   "category_reason": "Mentions having sushi, which is a food expense"
 }}
 
-Message: "Took an Uber to the airport for 50.5 dollars "
+Message: "Took an Uber to the airport for 50.5 dollars"
 Response: {{
   "is_expense": true,
   "reason": "Describes a transportation expense already completed",
   "amount": "50.5",
-  "description": "Uber ride to the airport",
+  "description": "Uber to the airport",
   "category": "Transportation",
   "category_reason": "Refers to a ride service, which is a transportation cost"
 }}
@@ -85,14 +94,34 @@ Response: {{
   "category_reason": "Clearly mentions paying rent, a housing-related expense"
 }}
 
+Message: "Donated 100 to the animal shelter"
+Response: {{
+  "is_expense": true,
+  "reason": "Describes a completed donation",
+  "amount": "100.0",
+  "description": "Donation to animal shelter",
+  "category": "Donations",
+  "category_reason": "Mentions donating to a shelter, fits 'Donations' category"
+}}
+
 Message: "50 bucks. Bought new running shoes from Nike"
 Response: {{
   "is_expense": true,
   "reason": "Describes a completed purchase",
   "amount": "50.0",
-  "description": "Bought running shoes from Nike",
+  "description": "Running shoes",
   "category": "Shopping",
   "category_reason": "Purchase of shoes falls under shopping"
+}}
+
+Message: "300 bucks. Bought new oven for the kitchen"
+Response: {{
+  "is_expense": true,
+  "reason": "Describes a completed purchase",
+  "amount": "300.0",
+  "description": "Oven",
+  "category": "Housing",
+  "category_reason": "Purchase of oven"
 }}
 
 Message: "Sent $300 to my savings account"
@@ -100,7 +129,7 @@ Response: {{
   "is_expense": true,
   "reason": "Mentions a completed transfer to savings",
   "amount": "300.0",
-  "description": "Transfer to savings account",
+  "description": "Savings account",
   "category": "Savings",
   "category_reason": "Transferring money to savings is a financial movement"
 }}
@@ -114,7 +143,6 @@ Response: {{
   "category": "Medical/Healthcare",
   "category_reason": "Medical check-up and lab tests are health-related expenses"
 }}
-
 
 Message: "{message}"
 """
