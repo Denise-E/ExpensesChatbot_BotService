@@ -7,7 +7,6 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 DB_CONNECTION_STR = os.getenv("DB_CONNECTION_STR")
 engine = create_engine(DB_CONNECTION_STR)
 
-# Crear una fábrica de sesiones
 SessionLocal = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))
 
 

@@ -12,7 +12,7 @@ Follow these steps strictly:
 1. **Classify if the message is a real, completed personal expense or money outflow.**
 
 Return:
-- "is_expense": true or false
+- "is_expense": True or False
 - "reason": explain your decision briefly.
 
 Only messages that clearly describe a **past** personal money outflow (purchase, payment, transfer, investment) must be classified as `true`.
@@ -24,11 +24,12 @@ Do **not** consider:
 
 ---
 
-2. **If `is_expense` is true**, extract:
-- "amount": the total spent, as a string with decimals (e.g., "8.50")
-- "description": short summary (e.g., "Lunch", "Netflix subscription")
+2. **If `is_expense` is True**, extract: - "amount": the total spent, as a string **with exactly one decimal**. - If 
+the original amount is an integer, format it as `"X.0"` (e.g., `"20"` → `"20.0"`). - If the amount has decimals, 
+retain **all the decimals digit**, omitting trailing zeros (e.g., `"20.5"` → `"20.5"`, `"30.55"` → `"30.55"`). - 
+"description": short summary (e.g., "Lunch", "Netflix subscription")
 
-If `is_expense` is false, set amount and description to `null`.
+If `is_expense` is Dalse, set amount and description to `null`.
 
 ---
 

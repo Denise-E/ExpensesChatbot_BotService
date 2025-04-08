@@ -8,9 +8,12 @@ class UsersService:
 
     @classmethod
     def create_user(cls, session: Session, user_info: dict) -> dict:
+        logger.info("Creating user")
         try:
+            # Validating telegram_id is not an empty string
             if not user_info["telegram_id"]:
                 raise Exception("Invalid telegram id")
+
             db_user = UsersDBService.get_user_by_telegram_id(session, user_info["telegram_id"])
 
             # If the user already exists, the existing user is returned
@@ -24,3 +27,13 @@ class UsersService:
         except Exception as e:
             logger.error(f"Unable to creat user in database: {e}")
             raise Exception(e)
+
+    @classmethod
+    def validate_user(cls, session: Session, telegram_id: str) -> Users:
+        # Verifies if the user is in the database (enabled for using the system)
+        user = UsersDBService.get_user_by_telegram_id(session, telegram_id)
+
+        # If the user is not in the database, it throws an exception
+        if not user:
+            raise Exception("User not found")
+

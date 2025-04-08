@@ -11,7 +11,7 @@ categories_str = ", ".join(CATEGORIES)
 class ModelsService:
     @classmethod
     def analyze_expense_model(cls, message: str) -> ExpenseModelOutput:
-        logger.info("Analyzing expense")
+        logger.info("Analyzing expense - Executing LLM model")
         start = time.perf_counter()
         result = expense_model_pipeline.invoke({
             "message": message,

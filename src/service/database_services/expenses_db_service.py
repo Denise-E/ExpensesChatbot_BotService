@@ -10,19 +10,20 @@ class ExpensesDBService:
 
     @classmethod
     def create_expense(cls, session: Session, expense_info: dict) -> None:
+        logger.info("Creating expense on database")
         try:
-            logger.info("Creating expense on database")
             expense = Expenses(**expense_info)
             session.add(expense)
             session.commit()
         except Exception as e:
             logger.error(f"Unable to create expense on database: {e}")
             session.rollback()
+            raise Exception("Unable to create expense")
 
     @classmethod
     def get_user_expenses(cls, session: Session, telegram_id: str) -> list:
+        logger.info("Getting user expenses from database")
         try:
-            logger.info("Getting user expenses from database")
             expenses = (
                 session.query(
                     Expenses

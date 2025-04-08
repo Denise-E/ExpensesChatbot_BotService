@@ -9,12 +9,13 @@ from src.service.expenses_service import ExpensesService
 expenses = Blueprint("expenses", __name__)
 
 
-@expenses.route("/create", methods=['POST'])
+@expenses.route("/create", methods=['POST'])  # Expense creation endpoint
 def create_expense():
     try:
         body = request.get_json()
 
         try:
+            # Input pydantic schema validation
             validated_body = CreateExpenseInput(**body)
         except Exception as e:
             logging.info(f"Pydantic input error: {e}")
@@ -27,6 +28,7 @@ def create_expense():
             telegram_id=validated_body.telegram_id,
             expense_info=validated_body.message
         )
+        # Output pydantic schema validation
         output = CreateExpenseOutput(**response)
 
         return jsonify(output.dict()), 200
@@ -35,13 +37,14 @@ def create_expense():
         return {"msg": str(e)}, 400
 
 
-@expenses.route("/get/<telegram_id>/all", methods=['GET'])
+@expenses.route("/get/<telegram_id>/all", methods=['GET'])  # Get user expenses endpoint
 def get_user_expenses(telegram_id):
     try:
         session = app.session
 
         response = ExpensesService.get_user_expenses(session, telegram_id)
 
+        # Output pydantic schema validation
         validated = GetAllUserExpensesOutput(expenses=response).dict()
         return jsonify(validated), 200
     except Exception as e:

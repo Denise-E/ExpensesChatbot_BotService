@@ -3,10 +3,9 @@ import datetime as dt
 from sqlalchemy.orm import Session
 
 from src.data.schemas import Expense
-from src.database.models.users import Users
 from src.service.database_services.expenses_db_service import ExpensesDBService
-from src.service.database_services.users_db_service import UsersDBService
 from src.service.models_service import ModelsService
+from src.service.users_service import UsersService
 from src.utils.logger import logger
 
 
@@ -17,15 +16,19 @@ class ExpensesService:
         logger.info("Creating expense")
 
         try:
-            user = cls.validate_user(session, telegram_id)
+            # Check if the user is in the whitelist
+            user = UsersService.validate_user(session, telegram_id)
 
-            # Llamada al modelo unificado (solo una vez)
+            # If the user is in the whitelist, the input text is analyzed by the LLM model
             result = ModelsService.analyze_expense_model(expense_info)
 
+            # Validates the received text is about an expense
             if not result.is_expense:
+                # If it's a non-expense texts it throws an exception
                 logger.info(f"The input is not an expense: {expense_info}")
                 raise Exception("Input is not an expense")
 
+            # If it's an expense texts but is not completed, it throws an exception
             if not result.amount:
                 raise Exception("Invalid amount")
 
@@ -37,6 +40,7 @@ class ExpensesService:
                 "added_at": dt.datetime.now()
             }
 
+            # Saves the expense into de database
             ExpensesDBService.create_expense(session, expense_info)
             return expense_info
         except Exception as e:
@@ -45,15 +49,21 @@ class ExpensesService:
 
     @classmethod
     def get_user_expenses(cls, session: Session, telegram_id: str) -> list:
+        logger.info("Getting user expenses")
         try:
-            logger.info("Getting user expenses")
-            cls.validate_user(session, telegram_id)
+            # Check if the user is in the whitelist
+            UsersService.validate_user(session, telegram_id)
+
+            # If the user is in the whitelist, get the expenses from database
             db_expenses = ExpensesDBService.get_user_expenses(session, telegram_id)
 
+            # If not expenses found, an empty list is returned
             if not db_expenses:
                 return []
 
             expenses = []
+
+            # Expense formatting
             for expense in db_expenses:
                 expense_data = {
                     "id": expense.id,
@@ -63,21 +73,9 @@ class ExpensesService:
                     "category": expense.category,
                     "added_at": expense.added_at
                 }
-                validated = Expense(**expense_data).dict()
-                expenses.append(validated)
+                expenses.append(expense_data)
 
             return expenses
         except Exception as e:
             logger.error(f"Error: {e}")
             raise Exception(e)
-
-    @classmethod
-    def validate_user(cls, session: Session, telegram_id: str) -> Users:
-        # Verifies if the user is in the database (enabled for using the system)
-        user = UsersDBService.get_user_by_telegram_id(session, telegram_id)
-
-        # If the user is not in the database, it throws an exception
-        if not user:
-            raise Exception("User not found")
-
-        return user
