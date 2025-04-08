@@ -19,15 +19,15 @@ app.register_blueprint(swagger_json_blueprint)
 app.register_blueprint(swaggerui_blueprint, url_prefix="/swagger")
 
 
+@app.route("/")
+def home():
+    return render_template("index.html")
+
+
 # Health route to check if the API is up
 @app.route("/api/health", methods=['GET'])
 def health():
     return {"msg": "OK"}, 200
-
-
-@app.route("/")
-def home():
-    return render_template("./src/templates/index.html")
 
 
 if __name__ == '__main__':
