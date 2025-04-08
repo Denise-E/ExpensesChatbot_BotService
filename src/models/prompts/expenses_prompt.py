@@ -64,14 +64,24 @@ Respond only with a JSON object in the following format:
   "category_reason": "string or null only if is_expense is false"
 }}
 
-Message: "Had sushi with friends last night, 10 bucks and it was so good!"
+Message: "Spent 20 on a Father's Day card and chocolates"
 Response: {{
   "is_expense": true,
-  "reason": "Describes a completed food expense",
-  "amount": "10.0",
-  "description": "Sushi",
-  "category": "Food",
-  "category_reason": "Mentions having sushi, which is a food expense"
+  "reason": "Describes a completed expense",
+  "amount": "20.0",
+  "description": "Father´s Day card and chocolates",
+  "category": "Gifts",
+  "category_reason": "Mentions that is for someone else"
+}}
+
+Message: "30 on a present for a friend"
+Response: {{
+  "is_expense": true,
+  "reason": "Describes a completed action with an specific amount",
+  "amount": "30.0",
+  "description": "Gift for a friend",
+  "category": "Gifts",
+  "category_reason": "Mentions that is a present for someone else"
 }}
 
 Message: "Took an Uber to the airport for 50.5 dollars"
