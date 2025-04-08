@@ -1,45 +1,50 @@
-import asyncio
-import sys
-
-from src.data.test_data.expense_analyzer_examples import expense_analyzer_examples
+from src.data.categories import CATEGORIES
+from src.data.test_data.expense_examples import expense_examples
 from src.models.chains_registry import expense_model_pipeline
 from src.utils.logger import logger
-from src.data.categories import CATEGORIES
 
 categories_str = ", ".join(CATEGORIES)
 
-if sys.platform.startswith("win"):
-    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
-
-async def main():
+def main():
     passed = 0
-    for i, example in enumerate(expense_analyzer_examples, start=1):
+    for i, example in enumerate(expense_examples, start=1):
         try:
-            result = await expense_model_pipeline.ainvoke({"message": example["input"], "categories": categories_str})
-            expected = example["expected"]["amount"]
-            received = result.amount
+            result = expense_model_pipeline.invoke({"message": example["input"], "categories": categories_str})
+            expected_is_expense = example["expected"]["is_expense"]
+            expected_amount = example["expected"]["amount"]
+            expected_category = example["expected"]["category"]
+            received_is_expense = result.is_expense
+            received_amount = result.amount
+            received_category = result.category
 
-            if received == str(expected):  # Due to changes on amount type for SQLAlchemy managment
-                logger.info(f"[{i}] ✅ OK | Input: {example['input']} | Result {received}")
-                logger.info(
-                    f"Description expected -> {example["expected"]["description"]} - Description recived -> {result.description}"
-                )
-                passed += 1
+            is_expense_ok = received_is_expense == expected_is_expense
+            amount_ok = received_amount == expected_amount
+            category_ok = received_category == expected_category
+
+            if expected_is_expense:
+                all_ok = is_expense_ok and amount_ok and category_ok
             else:
-                logger.warning(f"[{i}] ❌ FAIL | Input: {example['input']} | Result {received}")
-                logger.info(f"    ➤ Esperado: {expected}, Recibido: {received}")
-                logger.info(
-                    f"Description expected -> {example["expected"]["description"]} - Description recived -> {result.description}")
+                all_ok = is_expense_ok
+
+            if all_ok:
+                passed += 1
+                logger.info(f"[{i}] ✅ PASSED | Input: {example['input']}")
+            else:
+                logger.warning(f"[{i}] ❌ FAILED | Input: {example['input']}")
+                logger.warning(f"    ➤ Expected is_expense: {expected_is_expense}, Got: {received_is_expense}")
+                if expected_is_expense:
+                    logger.warning(f"    ➤ Expected amount: {expected_amount}, Got: {received_amount}")
+                    logger.warning(f"    ➤ Expected category: {expected_category}, Got: {received_category}")
 
         except Exception as e:
-            logger.warning(f"[{i}] ❌ ERROR | Input: {example['input']} - {result.description}")
+            logger.warning(f"[{i}] ❌ ERROR | Input: {example['input']}")
             logger.warning(f"    ➤ Excepción: {e}")
 
-    examples_quantity = len(expense_analyzer_examples)
+    examples_quantity = len(expense_examples)
     percentage = passed * 100 / examples_quantity
     logger.info(f"Successfull tests: {passed} out of {examples_quantity} - Equals a {round(percentage, 2)}% "
                 f"assertion")
 
 
-asyncio.run(main())
+main()
