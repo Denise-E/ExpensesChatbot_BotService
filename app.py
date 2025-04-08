@@ -1,7 +1,8 @@
+from flask import Flask
+
 from src.database.config import SessionLocal
 from src.routes.expenses_routes import expenses
 from src.routes.users_routes import users
-from flask import Flask
 
 app = Flask(__name__)
 

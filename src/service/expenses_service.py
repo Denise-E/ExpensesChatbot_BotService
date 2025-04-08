@@ -2,7 +2,6 @@ import datetime as dt
 
 from sqlalchemy.orm import Session
 
-from src.data.schemas import Expense
 from src.service.database_services.expenses_db_service import ExpensesDBService
 from src.service.models_service import ModelsService
 from src.service.users_service import UsersService

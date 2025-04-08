@@ -8,9 +8,3 @@ class Users(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     telegram_id = Column(Text, unique=True, nullable=False)
-
-    def as_dict(self):
-        return {
-            "id": self.id,
-            "telegram_id": self.telegram_id,
-        }

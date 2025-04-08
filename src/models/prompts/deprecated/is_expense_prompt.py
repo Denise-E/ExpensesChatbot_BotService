@@ -28,4 +28,3 @@ Clarifications:
 Message: "{message}"
 """
 )
-

@@ -35,4 +35,3 @@ Examples:
 Message: "{message}"
 """
 )
-
