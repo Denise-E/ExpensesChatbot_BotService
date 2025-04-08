@@ -8,3 +8,4 @@ pytest==8.3.5
 SQLAlchemy==2.0.40
 psycopg2==2.9.10
 flask-swagger-ui==4.11.1
+gunicorn==23.0.0
