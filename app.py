@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 
 from src.database.config import SessionLocal
 from src.routes.expenses_routes import expenses
@@ -18,12 +18,18 @@ app.register_blueprint(users, url_prefix="/api/users")
 app.register_blueprint(swagger_json_blueprint)
 app.register_blueprint(swaggerui_blueprint, url_prefix="/swagger")
 
+
 # Health route to check if the API is up
 @app.route("/api/health", methods=['GET'])
 def health():
     return {"msg": "OK"}, 200
 
 
+@app.route("/")
+def home():
+    return render_template("./src/templates/index.html")
+
+
 if __name__ == '__main__':
     # Local URL: http://127.0.0.1:5000
-    app.run(port=5000)
+    app.run()
