@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 
+from src.database.models.users import Users
 from src.service.database_services.users_db_service import UsersDBService
 from src.utils.logger import logger
 
@@ -25,7 +26,7 @@ class UsersService:
             user = UsersDBService.create_user(session, user_info)
             return {"id": user.id, "telegram_id": user.telegram_id}
         except Exception as e:
-            logger.error(f"Unable to creat user in database: {e}")
+            logger.error(f"Unable to create user in database: {e}")
             raise Exception(e)
 
     @classmethod
@@ -37,3 +38,4 @@ class UsersService:
         if not user:
             raise Exception("User not found")
 
+        return user
