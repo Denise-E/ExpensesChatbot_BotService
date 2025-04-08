@@ -1,3 +1,4 @@
+dotenv==0.9.9
 Flask==3.1.0
 langchain==0.3.23
 langchain_core==0.3.51
@@ -6,3 +7,4 @@ pydantic==2.11.2
 pytest==8.3.5
 SQLAlchemy==2.0.40
 psycopg2==2.9.10
+flask-swagger-ui==4.11.1
