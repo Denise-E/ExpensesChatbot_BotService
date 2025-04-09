@@ -9,9 +9,20 @@
   "schemes": [
     "http"
   ],
+  "tags": [
+    {
+      "name": "Users",
+      "description": "Operations related to Telegram users"
+    },
+    {
+      "name": "Expenses",
+      "description": "Operations related to user expenses"
+    }
+  ],
   "paths": {
     "/expenses/create": {
       "post": {
+        "tags": ["Expenses"],
         "summary": "Create expense",
         "description": "Analyzes the user's message, extracts amount and description, classifies the expense, and stores it.",
         "consumes": [
@@ -94,6 +105,7 @@
     },
     "/users/create": {
       "post": {
+        "tags": ["Users"],
         "summary": "Register user",
         "description": "Creates a new Telegram user or ignores the request if the user already exists.",
         "consumes": [
@@ -151,6 +163,7 @@
     },
     "/expenses/{telegram_id}/all": {
       "get": {
+        "tags": ["Expenses"],
         "summary": "Get user expenses",
         "description": "Returns all expenses recorded by a Telegram user.",
         "parameters": [

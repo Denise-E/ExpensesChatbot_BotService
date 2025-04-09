@@ -1,6 +1,7 @@
 from sqlalchemy import desc
 from sqlalchemy.orm import Session
 
+from src.database.config import SessionLocal
 from src.database.models.expenses import Expenses
 from src.database.models.users import Users
 from src.utils.logger import logger
@@ -12,12 +13,16 @@ class ExpensesDBService:
     def create_expense(cls, session: Session, expense_info: dict) -> None:
         logger.info("Creating expense on database")
         try:
+            # Quick fix for production
+            session.close()
+            new_session = SessionLocal()
+
             expense = Expenses(**expense_info)
-            session.add(expense)
-            session.commit()
+            new_session.add(expense)
+            new_session.commit()
         except Exception as e:
             logger.error(f"Unable to create expense on database: {e}")
-            session.rollback()
+            new_session.rollback()
             raise Exception("Unable to create expense")
 
     @classmethod
