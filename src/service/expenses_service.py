@@ -20,7 +20,7 @@ class ExpensesService:
 
             # If the user is in the whitelist, the input text is analyzed by the LLM model
             result = ModelsService.analyze_expense_model(expense_info)
-
+            logger.info("LLM Model finished")
             # Validates the received text is about an expense
             if not result.is_expense:
                 # If it's a non-expense texts it throws an exception
