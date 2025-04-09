@@ -9,11 +9,3 @@ engine = create_engine(DB_CONNECTION_STR)
 
 SessionLocal = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))
 
-
-# Function to access the session instance
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db  # Returns de session instance
-    finally:
-        db.close()  # Ensures session closing
