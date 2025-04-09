@@ -1,8 +1,7 @@
 import logging
 
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, g
 
-import app
 from src.data.schemas import CreateUserInput, CreateUserOutput
 from src.service.users_service import UsersService
 
@@ -20,7 +19,7 @@ def create_user():
             logging.info(f"Pydantic input error: {e}")
             raise Exception("Invalid input")
 
-        session = app.session
+        session = g.db
         response = UsersService.create_user(session, validated_body.dict())
 
         # Output pydantic schema validation

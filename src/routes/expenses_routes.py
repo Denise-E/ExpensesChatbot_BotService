@@ -1,8 +1,7 @@
 import logging
 
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, g
 
-import app
 from src.data.schemas import CreateExpenseOutput, CreateExpenseInput, GetAllUserExpensesOutput
 from src.exceptions.users_exceptions import UserNotFoundException
 from src.service.expenses_service import ExpensesService
@@ -22,7 +21,7 @@ def create_expense():
             logging.info(f"Pydantic input error: {e}")
             raise Exception("Invalid input")
 
-        session = app.session
+        session = g.db
 
         response = ExpensesService.create_expense(
             session=session,
@@ -44,8 +43,7 @@ def create_expense():
 @expenses.route("/get/<telegram_id>/all", methods=['GET'])  # Get user expenses endpoint
 def get_user_expenses(telegram_id):
     try:
-        session = app.session
-
+        session = g.db
         response = ExpensesService.get_user_expenses(session, telegram_id)
 
         # Output pydantic schema validation

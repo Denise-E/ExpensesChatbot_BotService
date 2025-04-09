@@ -13,16 +13,17 @@ class ExpensesDBService:
     def create_expense(cls, session: Session, expense_info: dict) -> None:
         logger.info("Creating expense on database")
         try:
-            # Quick fix for production
-            session.close()
-            new_session = SessionLocal()
-
             expense = Expenses(**expense_info)
-            new_session.add(expense)
-            new_session.commit()
+            logger.info("Adding expense to session")
+            session.add(expense)
+
+            logger.info("Committing session")
+            session.commit()
+
+            logger.info("Expense committed successfully")
         except Exception as e:
             logger.error(f"Unable to create expense on database: {e}")
-            new_session.rollback()
+            session.rollback()
             raise Exception("Unable to create expense")
 
     @classmethod

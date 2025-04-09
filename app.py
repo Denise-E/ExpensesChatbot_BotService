@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, render_template
+from flask import Flask, render_template, g
 
 from src.database.config import SessionLocal
 from src.routes.expenses_routes import expenses
@@ -9,9 +9,6 @@ from src.routes.users_routes import users
 
 app = Flask(__name__)
 
-# Global instance of the database session
-session = SessionLocal()
-
 # Register blueprints - routes files connection
 app.register_blueprint(expenses, url_prefix="/api/expenses")
 app.register_blueprint(users, url_prefix="/api/users")
@@ -19,6 +16,22 @@ app.register_blueprint(users, url_prefix="/api/users")
 # Swagger route
 app.register_blueprint(swagger_json_blueprint)
 app.register_blueprint(swaggerui_blueprint, url_prefix="/swagger")
+
+
+@app.before_request
+def create_session():
+    g.db = SessionLocal()
+
+
+@app.teardown_request
+def shutdown_session(exception=None):
+    db = getattr(g, 'db', None)
+    if db is not None:
+        if exception:
+            db.rollback()
+        else:
+            db.commit()
+        db.close()
 
 
 @app.route("/")
